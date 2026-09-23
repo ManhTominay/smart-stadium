@@ -10,4 +10,7 @@ public interface BookingService {
     List<Booking> getAllBookings();
     Booking getBookingById(Long id);
     void cancelBooking(Long id);
+
+    // Phương thức bổ sung: Lấy danh sách lịch đã đặt theo sân và ngày cụ thể
+    List<Booking> getBookingsByFieldAndDate(Long fieldId, LocalDate date);
 }

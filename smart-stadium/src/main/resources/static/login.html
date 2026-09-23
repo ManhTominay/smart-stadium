@@ -128,8 +128,12 @@
 
                 alert('Đăng nhập thành công!');
 
-                // Chuyển hướng người dùng về trang chủ
-                window.location.href = '/';
+                // Kiểm tra phân quyền: Nếu là ADMIN thì vào trang quản trị, ngược lại về trang chủ
+                if (userData.role && userData.role.toUpperCase() === 'ADMIN') {
+                    window.location.href = '/admin.html';
+                } else {
+                    window.location.href = '/';
+                }
             } else {
                 const errorMsg = await response.text();
                 alert(errorMsg || 'Tài khoản hoặc mật khẩu không chính xác!');

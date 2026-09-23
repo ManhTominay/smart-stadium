@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Stadium - Trang Quản Trị Admin</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { display: flex; height: 100vh; background-color: #f4f6f9; }
+
+        /* Sidebar */
+        .sidebar { width: 260px; background-color: #1e1e2d; color: #fff; display: flex; flex-direction: column; justify-content: space-between; }
+        .sidebar-top { flex: 1; }
+        .sidebar h2 { padding: 25px 20px; font-size: 20px; background-color: #151521; text-align: center; }
+        .sidebar ul { list-style: none; padding: 20px 10px; }
+        .sidebar ul li { padding: 12px 15px; margin-bottom: 8px; border-radius: 6px; cursor: pointer; font-weight: 600; color: #a2a5b9; transition: all 0.3s; }
+        .sidebar ul li:hover, .sidebar ul li.active { background-color: #363740; color: #fff; }
+
+        /* Nút Đăng Xuất ở góc dưới bên trái */
+        .sidebar-bottom { padding: 20px; background-color: #151521; }
+        .btn-logout { width: 100%; padding: 10px; background-color: #dc3545; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.3s; }
+        .btn-logout:hover { background-color: #c82333; }
+
+        /* Main Content */
+        .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .header { height: 60px; background-color: #fff; border-bottom: 1px solid #e5e5e5; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; }
+        .content-body { padding: 30px; overflow-y: auto; flex: 1; }
+
+        /* Cards Thống Kê */
+        .stats-container { display: flex; gap: 20px; margin-bottom: 30px; }
+        .stat-card { flex: 1; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-left: 5px solid #36a2eb; }
+        .stat-card h3 { font-size: 14px; color: #6c757d; margin-bottom: 10px; }
+        .stat-card p { font-size: 22px; font-weight: bold; color: #333; }
+
+        /* Form và Bảng dữ liệu */
+        .section-box { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .section-box h3 { margin-bottom: 15px; font-size: 18px; color: #333; }
+
+        .form-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        .form-group input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e5e5e5; font-size: 14px; }
+        th { background-color: #f8f9fa; color: #495057; }
+
+        button { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: #fff; margin-right: 5px; }
+        .btn-success { background-color: #28a745; }
+        .btn-danger { background-color: #dc3545; }
+        .btn-warning { background-color: #ffc107; color: #000; }
+        .btn-primary { background-color: #007bff; }
+        .btn-secondary { background-color: #6c757d; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="sidebar-top">
+        <h2>Smart Stadium</h2>
+        <ul>
+            <li class="active" onclick="switchTab('statistics', this)">📊 Báo Cáo Thống Kê</li>
+            <li onclick="switchTab('stadiums', this)">🏸 Quản Lý Sân Thể Thao</li>
+            <li onclick="switchTab('bookings', this)">📅 Quản Lý Đặt Sân</li>
+        </ul>
+    </div>
+    <!-- Nút đăng xuất ở góc dưới bên trái -->
+    <div class="sidebar-bottom">
+        <button class="btn-logout" onclick="logout()">Đăng Xuất</button>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="header">
+        <h3>Trang Quản Trị Hệ Thống</h3>
+        <span id="admin-user">Xin chào, Admin</span>
+    </div>
+
+    <div class="content-body">
+
+        <!-- TAB 1: THỐNG KÊ -->
+        <div id="statistics" class="tab-content active">
+            <div class="stats-container">
+                <div class="stat-card" style="border-left-color: #36a2eb;">
+                    <h3>Tổng Số Sân Thể Thao</h3>
+                    <p id="stat-stadiums">0</p>
+                </div>
+                <div class="stat-card" style="border-left-color: #ff6384;">
+                    <h3>Tổng Lượt Đặt Sân</h3>
+                    <p id="stat-bookings">0</p>
+                </div>
+                <div class="stat-card" style="border-left-color: #4bc0c0;">
+                    <h3>Doanh Thu Dự Kiến</h3>
+                    <p id="stat-revenue">0 VNĐ</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: QUẢN LÝ SÂN THỂ THAO -->
+        <div id="stadiums" class="tab-content">
+            <div class="section-box">
+                <h3 id="form-title">Thêm Sân Thể Thao Mới</h3>
+                <form id="stadium-form" onsubmit="saveStadium(event)">
+                    <input type="hidden" id="stadium-id">
+                    <div class="form-group">
+                        <input type="text" id="stadium-name" placeholder="Tên sân" required>
+                        <input type="text" id="stadium-address" placeholder="Địa chỉ sân" required>
+                        <input type="text" id="stadium-description" placeholder="Mô tả sân">
+                        <button type="submit" id="btn-submit" class="btn-success">Thêm Sân</button>
+                        <button type="button" id="btn-cancel" class="btn-secondary" style="display:none;" onclick="resetForm()">Hủy</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="section-box">
+                <h3>Danh Sách Các Sân Thể Thao</h3>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên Sân</th>
+                        <th>Địa Chỉ</th>
+                        <th>Mô Tả</th>
+                        <th>Thao Tác</th>
+                    </tr>
+                    </thead>
+                    <tbody id="stadium-table-body">
+                    <!-- Dữ liệu được load từ API -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 3: QUẢN LÝ ĐẶT SÂN -->
+        <div id="bookings" class="tab-content">
+            <div class="section-box">
+                <h3>Quản Lý Lịch Đặt Sân</h3>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID Đơn</th>
+                        <th>Thông Tin Đặt Sân</th>
+                        <th>Trạng Thái</th>
+                        <th>Thao Tác Duyệt</th>
+                    </tr>
+                    </thead>
+                    <tbody id="booking-table-body">
+                    <!-- Dữ liệu được load từ API -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function switchTab(tabId, element) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.sidebar ul li').forEach(el => el.classList.remove('active'));
+
+        document.getElementById(tabId).classList.add('active');
+        element.classList.add('active');
+
+        if(tabId === 'statistics') loadStatistics();
+        if(tabId === 'stadiums') loadStadiums();
+        if(tabId === 'bookings') loadBookings();
+    }
+
+    // Đăng xuất ngay lập tức khi bấm nút
+    function logout() {
+        window.location.href = 'index.html'; // Đổi lại thành 'login.html' nếu trang đăng nhập của bạn tên là login.html
+    }
+
+    function loadStatistics() {
+        fetch('http://localhost:8080/api/admin/statistics')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('stat-stadiums').innerText = data.totalStadiums || 0;
+                document.getElementById('stat-bookings').innerText = data.totalBookings || 0;
+                document.getElementById('stat-revenue').innerText = (data.totalRevenue || 0).toLocaleString() + ' VNĐ';
+            }).catch(err => console.error("Lỗi tải thống kê:", err));
+    }
+
+    function loadStadiums() {
+        fetch('http://localhost:8080/api/admin/stadiums')
+            .then(res => res.json())
+            .then(data => {
+                let tbody = document.getElementById('stadium-table-body');
+                tbody.innerHTML = '';
+                if(data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #777;">Chưa có sân nào trong hệ thống</td></tr>`;
+                    return;
+                }
+                data.forEach(s => {
+                    let safeAddress = s.address ? s.address.replace(/'/g, "\\'") : '';
+                    let safeName = s.name ? s.name.replace(/'/g, "\\'") : '';
+                    let safeDesc = s.description ? s.description.replace(/'/g, "\\'") : '';
+
+                    tbody.innerHTML += `
+                            <tr>
+                                <td>${s.id}</td>
+                                <td><b>${s.name}</b></td>
+                                <td>${s.address || 'Đang cập nhật'}</td>
+                                <td>${s.description || ''}</td>
+                                <td>
+                                    <button class="btn-primary" onclick="prepareEdit(${s.id}, '${safeName}', '${safeAddress}', '${safeDesc}')">Sửa</button>
+                                    <button class="btn-danger" onclick="deleteStadium(${s.id})">Xóa</button>
+                                </td>
+                            </tr>
+                        `;
+                });
+            }).catch(err => console.error("Lỗi tải danh sách sân:", err));
+    }
+
+    function saveStadium(event) {
+        event.preventDefault();
+        let id = document.getElementById('stadium-id').value;
+        let name = document.getElementById('stadium-name').value;
+        let address = document.getElementById('stadium-address').value;
+        let description = document.getElementById('stadium-description').value;
+
+        let url = 'http://localhost:8080/api/admin/stadiums';
+        let method = 'POST';
+
+        if (id) {
+            url += `/${id}`;
+            method = 'PUT';
+        }
+
+        fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, address, description })
+        })
+            .then(res => {
+                if(res.ok) {
+                    alert(id ? 'Cập nhật thông tin sân thành công!' : 'Thêm sân mới thành công!');
+                    resetForm();
+                    loadStadiums();
+                } else {
+                    alert('Có lỗi xảy ra khi lưu!');
+                }
+            })
+            .catch(err => console.error("Lỗi:", err));
+    }
+
+    function prepareEdit(id, name, address, description) {
+        document.getElementById('stadium-id').value = id;
+        document.getElementById('stadium-name').value = name;
+        document.getElementById('stadium-address').value = address;
+        document.getElementById('stadium-description').value = description;
+
+        document.getElementById('form-title').innerText = `Chỉnh Sửa Sân (ID: ${id})`;
+        document.getElementById('btn-submit').innerText = 'Cập Nhật';
+        document.getElementById('btn-submit').className = 'btn-primary';
+        document.getElementById('btn-cancel').style.display = 'inline-block';
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetForm() {
+        document.getElementById('stadium-form').reset();
+        document.getElementById('stadium-id').value = '';
+        document.getElementById('form-title').innerText = 'Thêm Sân Thể Thao Mới';
+        document.getElementById('btn-submit').innerText = 'Thêm Sân';
+        document.getElementById('btn-submit').className = 'btn-success';
+        document.getElementById('btn-cancel').style.display = 'none';
+    }
+
+    function deleteStadium(id) {
+        if(confirm('Bạn có chắc muốn xóa sân này?')) {
+            fetch(`http://localhost:8080/api/admin/stadiums/${id}`, { method: 'DELETE' })
+                .then(() => loadStadiums())
+                .catch(err => console.error("Lỗi xóa sân:", err));
+        }
+    }
+
+    function loadBookings() {
+        fetch('http://localhost:8080/api/admin/bookings')
+            .then(res => res.json())
+            .then(data => {
+                let tbody = document.getElementById('booking-table-body');
+                tbody.innerHTML = '';
+                data.forEach(b => {
+                    tbody.innerHTML += `
+                            <tr>
+                                <td>${b.id}</td>
+                                <td>Đơn đặt sân #${b.id}</td>
+                                <td>${b.status || 'PENDING'}</td>
+                                <td>
+                                    <button class="btn-success" onclick="updateBooking(${b.id}, 'APPROVED')">Duyệt</button>
+                                    <button class="btn-warning" onclick="updateBooking(${b.id}, 'CANCELLED')">Hủy</button>
+                                </td>
+                            </tr>
+                        `;
+                });
+            }).catch(err => console.error("Lỗi tải danh sách đặt sân:", err));
+    }
+
+    function updateBooking(id, status) {
+        fetch(`http://localhost:8080/api/admin/bookings/${id}/status?status=${status}`, { method: 'PUT' })
+            .then(() => loadBookings())
+            .catch(err => console.error("Lỗi cập nhật trạng thái:", err));
+    }
+
+    window.onload = function() {
+        loadStatistics();
+        loadStadiums();
+    };
+</script>
+</body>
+</html>

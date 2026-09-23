@@ -4,44 +4,53 @@ import com.example.smartstadium.entity.Field;
 import com.example.smartstadium.entity.Stadium;
 import com.example.smartstadium.repository.FieldRepository;
 import com.example.smartstadium.repository.StadiumRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/stadiums")
-@RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class StadiumController {
 
-    private final StadiumRepository stadiumRepository;
-    private final FieldRepository fieldRepository;
+    @Autowired
+    private StadiumRepository stadiumRepository;
 
-    // 1. Thêm mới một cơ sở sân
-    @PostMapping
-    public ResponseEntity<Stadium> createStadium(@RequestBody Stadium stadium) {
-        return ResponseEntity.ok(stadiumRepository.save(stadium));
+    @Autowired
+    private FieldRepository fieldRepository; // Thêm Repository của sân con
+
+    // API công khai để lấy toàn bộ danh sách sân cho trang chủ
+    @GetMapping("/api/stadiums")
+    public List<Stadium> getAllStadiums() {
+        return stadiumRepository.findAll();
     }
 
-    // 2. Lấy danh sách tất cả các sân
-    @GetMapping
-    public ResponseEntity<List<Stadium>> getAllStadiums() {
-        return ResponseEntity.ok(stadiumRepository.findAll());
+    // API lấy danh sách sân con thuộc một cụm sân theo ID (Được gọi khi bấm xem chi tiết)
+    @GetMapping("/api/stadiums/{id}/fields")
+    public List<Field> getFieldsByStadiumId(@PathVariable Long id) {
+        return fieldRepository.findByStadiumId(id);
     }
 
-    // 3. Thêm sân con (Field) vào cụm sân
-    @PostMapping("/{stadiumId}/fields")
-    public ResponseEntity<Field> addFieldToStadium(@PathVariable Long stadiumId, @RequestBody Field field) {
-        Stadium stadium = stadiumRepository.findById(stadiumId)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy cụm sân"));
-        field.setStadium(stadium);
-        return ResponseEntity.ok(fieldRepository.save(field));
+    // Các API quản lý dành cho Admin giữ nguyên tiền tố /api/admin
+    @PostMapping("/api/admin/stadiums")
+    public Stadium addStadium(@RequestBody Stadium stadium) {
+        return stadiumRepository.save(stadium);
     }
 
-    // 4. Xem danh sách sân con của một cụm sân
-    @GetMapping("/{stadiumId}/fields")
-    public ResponseEntity<List<Field>> getFieldsByStadium(@PathVariable Long stadiumId) {
-        return ResponseEntity.ok(fieldRepository.findByStadiumId(stadiumId));
+    @PutMapping("/api/admin/stadiums/{id}")
+    public Stadium updateStadium(@PathVariable Long id, @RequestBody Stadium stadiumDetails) {
+        Stadium stadium = stadiumRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy sân với ID: " + id));
+
+        stadium.setName(stadiumDetails.getName());
+        stadium.setAddress(stadiumDetails.getAddress());
+        stadium.setDescription(stadiumDetails.getDescription());
+
+        return stadiumRepository.save(stadium);
+    }
+
+    @DeleteMapping("/api/admin/stadiums/{id}")
+    public void deleteStadium(@PathVariable Long id) {
+        stadiumRepository.deleteById(id);
     }
 }
