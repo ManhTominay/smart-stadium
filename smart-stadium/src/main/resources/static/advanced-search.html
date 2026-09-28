@@ -278,9 +278,53 @@
     document.getElementById('executeSearch').addEventListener('click', filterAndRender);
 
     async function filterAndRender() {
+        const searchDate = document.getElementById('searchDate').value; // Định dạng YYYY-MM-DD
+        const timeFromInput = document.getElementById('timeFrom').value; // HH:mm
+        const timeToInput = document.getElementById('timeTo').value;     // HH:mm
         const addressKey = document.getElementById('addressKeyword').value.toLowerCase().trim();
-        let filtered = [];
 
+        // Kiểm tra nếu người dùng đã nhập đủ thông tin thời gian, ta gọi API tìm sân trống theo giờ
+        if (searchDate && timeFromInput && timeToInput) {
+            const startTime = timeFromInput.length === 5 ? timeFromInput + ":00" : timeFromInput;
+            const endTime = timeToInput.length === 5 ? timeToInput + ":00" : timeToInput;
+
+            const url = `/api/stadiums/search-available?date=${searchDate}&startTime=${startTime}&endTime=${endTime}`;
+
+            try {
+                let res = await fetch(url);
+                let availableFields = await res.json();
+
+                // availableFields trả về danh sách các "Field" (sân con) trống.
+                // Ta có thể gom nhóm chúng theo Cụm sân (Stadium) để hiển thị lên giao diện thẻ.
+                let stadiumMap = new Map();
+                availableFields.forEach(field => {
+                    if (field.stadium) {
+                        if (!stadiumMap.has(field.stadium.id)) {
+                            stadiumMap.set(field.stadium.id, field.stadium);
+                        }
+                    }
+                });
+
+                let filtered = Array.from(stadiumMap.values());
+
+                // Lọc tiếp theo từ khóa địa điểm nếu có nhập
+                if (addressKey) {
+                    filtered = filtered.filter(stadium =>
+                        stadium.name.toLowerCase().includes(addressKey) ||
+                        (stadium.address && stadium.address.toLowerCase().includes(addressKey))
+                    );
+                }
+
+                document.getElementById('section-title').innerText = `📍 Tìm thấy ${filtered.length} cụm sân có sân trống phù hợp`;
+                renderStadiums(filtered);
+                return;
+            } catch (e) {
+                console.error("Lỗi gọi API tìm sân trống:", e);
+            }
+        }
+
+        // Trường hợp chưa chọn đủ giờ thì fallback về lọc thông thường trên allStadiums
+        let filtered = [];
         for (let stadium of allStadiums) {
             let matchAddress = !addressKey ||
                 stadium.name.toLowerCase().includes(addressKey) ||

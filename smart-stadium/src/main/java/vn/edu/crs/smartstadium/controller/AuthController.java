@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -21,5 +23,17 @@ public class AuthController {
         }
         User savedUser = userRepository.save(user);
         return ResponseEntity.ok(savedUser);
+    }
+
+    // --- THÊM API ĐĂNG NHẬP NÀY VÀO ---
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody User loginRequest) {
+        Optional<User> userOpt = userRepository.findByUsername(loginRequest.getUsername());
+
+        if (userOpt.isPresent() && userOpt.get().getPassword().equals(loginRequest.getPassword())) {
+            return ResponseEntity.ok(userOpt.get()); // Đăng nhập thành công, trả về thông tin user
+        }
+
+        return ResponseEntity.status(401).body("Tên đăng nhập hoặc mật khẩu không chính xác!");
     }
 }
