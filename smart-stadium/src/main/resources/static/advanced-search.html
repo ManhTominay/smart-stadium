@@ -1,424 +1,424 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tìm Kiếm Nâng Cao - Smart Stadium</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f4f7f6;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+    <!DOCTYPE html>
+    <html lang="vi">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tìm Kiếm Nâng Cao - Smart Stadium</title>
+        <!-- Bootstrap 5 CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Bootstrap Icons -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+        <style>
+            body {
+                background-color: #f4f7f6;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
 
-        .header-title {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            padding: 30px 0;
-            text-align: center;
-        }
+            .header-title {
+                background: linear-gradient(135deg, #10b981, #059669);
+                color: white;
+                padding: 30px 0;
+                text-align: center;
+            }
 
-        .search-card {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            padding: 30px;
-            margin-top: -30px;
-            margin-bottom: 30px;
-            position: relative;
-            z-index: 10;
-        }
+            .search-card {
+                background: white;
+                border-radius: 16px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+                padding: 30px;
+                margin-top: -30px;
+                margin-bottom: 30px;
+                position: relative;
+                z-index: 10;
+            }
 
-        .sport-chip {
-            border: 1px solid #d1d5db;
-            background: white;
-            color: #374151;
-            border-radius: 20px;
-            padding: 6px 16px;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        .sport-chip.active, .sport-chip:hover {
-            background-color: #e6f4ea;
-            border-color: #10b981;
-            color: #059669;
-        }
+            .sport-chip {
+                border: 1px solid #d1d5db;
+                background: white;
+                color: #374151;
+                border-radius: 20px;
+                padding: 6px 16px;
+                font-size: 14px;
+                font-weight: 500;
+                transition: all 0.2s;
+            }
+            .sport-chip.active, .sport-chip:hover {
+                background-color: #e6f4ea;
+                border-color: #10b981;
+                color: #059669;
+            }
 
-        .tab-filter {
-            border: 1px solid #d1d5db;
-            background: white;
-            color: #374151;
-            border-radius: 8px;
-            padding: 8px 0;
-            font-weight: 600;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .tab-filter.active {
-            border-color: #10b981;
-            color: #10b981;
-            background-color: #f0fdf4;
-        }
+            .tab-filter {
+                border: 1px solid #d1d5db;
+                background: white;
+                color: #374151;
+                border-radius: 8px;
+                padding: 8px 0;
+                font-weight: 600;
+                text-align: center;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+            .tab-filter.active {
+                border-color: #10b981;
+                color: #10b981;
+                background-color: #f0fdf4;
+            }
 
-        .keyword-chip {
-            background-color: #f3f4f6;
-            border: none;
-            border-radius: 16px;
-            padding: 5px 14px;
-            font-size: 13px;
-            color: #4b5563;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .keyword-chip:hover {
-            background-color: #e5e7eb;
-            color: #111827;
-        }
+            .keyword-chip {
+                background-color: #f3f4f6;
+                border: none;
+                border-radius: 16px;
+                padding: 5px 14px;
+                font-size: 13px;
+                color: #4b5563;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+            .keyword-chip:hover {
+                background-color: #e5e7eb;
+                color: #111827;
+            }
 
-        .card-stadium {
-            border: none;
-            border-radius: 12px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card-stadium:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
+            .card-stadium {
+                border: none;
+                border-radius: 12px;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            .card-stadium:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            }
 
-        footer {
-            margin-top: auto;
-        }
-    </style>
-</head>
-<body>
+            footer {
+                margin-top: auto;
+            }
+        </style>
+    </head>
+    <body>
 
-<!-- Header -->
-<div class="header-title">
+    <!-- Header -->
+    <div class="header-title">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="index.html" class="btn btn-outline-light btn-sm rounded-pill px-3">
+                    <i class="bi bi-arrow-left me-1"></i> Quay lại trang chủ
+                </a>
+                <h3 class="fw-bold mb-0 text-white">🔍 Tìm Kiếm Sân Nâng Cao</h3>
+                <div style="width: 140px;"></div> <!-- Spacer căn giữa -->
+            </div>
+        </div>
+    </div>
+
     <div class="container">
-        <div class="d-flex justify-content-between align-items-center">
-            <a href="index.html" class="btn btn-outline-light btn-sm rounded-pill px-3">
-                <i class="bi bi-arrow-left me-1"></i> Quay lại trang chủ
-            </a>
-            <h3 class="fw-bold mb-0 text-white">🔍 Tìm Kiếm Sân Nâng Cao</h3>
-            <div style="width: 140px;"></div> <!-- Spacer căn giữa -->
-        </div>
-    </div>
-</div>
+        <div class="search-card">
+            <h5 class="fw-bold text-success mb-4"><i class="bi bi-sliders me-2"></i>Tùy chọn bộ lọc nâng cao</h5>
 
-<div class="container">
-    <div class="search-card">
-        <h5 class="fw-bold text-success mb-4"><i class="bi bi-sliders me-2"></i>Tùy chọn bộ lọc nâng cao</h5>
-
-        <!-- Môn thể thao -->
-        <div class="mb-4">
-            <label class="fw-bold text-dark mb-2">Môn thể thao</label>
-            <div class="d-flex flex-wrap gap-2" id="sport-chips">
-                <button class="sport-chip active" data-sport="all">Tất cả</button>
-                <button class="sport-chip" data-sport="Pickleball">🏓 Pickleball</button>
-                <button class="sport-chip" data-sport="Cầu lông">🏸 Cầu lông</button>
-                <button class="sport-chip" data-sport="Bóng đá">⚽ Bóng đá</button>
-                <button class="sport-chip" data-sport="Tennis">🎾 Tennis</button>
-                <button class="sport-chip" data-sport="Bóng chuyền">🏐 Bóng chuyền</button>
-            </div>
-        </div>
-
-        <!-- Loại lịch -->
-        <div class="mb-4">
-            <label class="fw-bold text-dark mb-2">Loại lịch</label>
-            <div class="row g-2">
-                <div class="col-6 col-md-3"><div class="tab-filter active" onclick="setTab(this)">Sân trống</div></div>
-            </div>
-        </div>
-
-        <!-- Chọn thời gian -->
-        <div class="row g-3 mb-4">
-            <div class="col-md-4">
-                <label class="fw-bold text-dark mb-2">Chọn ngày</label>
-                <input type="date" id="searchDate" class="form-control">
-            </div>
-            <div class="col-md-4">
-                <label class="fw-bold text-dark mb-2">Từ giờ</label>
-                <input type="time" id="timeFrom" class="form-control">
-            </div>
-            <div class="col-md-4">
-                <label class="fw-bold text-dark mb-2">Đến giờ</label>
-                <input type="time" id="timeTo" class="form-control">
-            </div>
-        </div>
-
-        <!-- Địa điểm -->
-        <div class="mb-4">
-            <label class="fw-bold text-dark mb-2">Khu vực / Địa điểm</label>
-            <div class="row g-2">
-                <div class="col-md-6 mb-2 mb-md-0">
-                    <select id="citySelect" class="form-select">
-                        <option value="">Chọn Tỉnh/TP (Tất cả)</option>
-                        <option value="Hà Nội" selected>Hà Nội</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <input type="text" id="addressKeyword" class="form-control" placeholder="Nhập tên đường, phường/xã, tên sân...">
+            <!-- Môn thể thao -->
+            <div class="mb-4">
+                <label class="fw-bold text-dark mb-2">Môn thể thao</label>
+                <div class="d-flex flex-wrap gap-2" id="sport-chips">
+                    <button class="sport-chip active" data-sport="all">Tất cả</button>
+                    <button class="sport-chip" data-sport="Pickleball">🏓 Pickleball</button>
+                    <button class="sport-chip" data-sport="Cầu lông">🏸 Cầu lông</button>
+                    <button class="sport-chip" data-sport="Bóng đá">⚽ Bóng đá</button>
+                    <button class="sport-chip" data-sport="Tennis">🎾 Tennis</button>
+                    <button class="sport-chip" data-sport="Bóng chuyền">🏐 Bóng chuyền</button>
                 </div>
             </div>
-        </div>
 
-        <!-- Từ khóa gợi ý -->
-        <div class="mb-4">
-            <label class="fw-bold text-dark mb-2">Từ khóa phổ biến</label>
-            <div class="d-flex flex-wrap gap-2">
-                <button class="keyword-chip" onclick="quickKeyword('Pickleball')">Pickleball gần tôi</button>
-                <button class="keyword-chip" onclick="quickKeyword('Cầu lông')">Cầu lông gần tôi</button>
-                <button class="keyword-chip" onclick="quickKeyword('Thủy Lợi')">Sân Thủy Lợi</button>
-                <button class="keyword-chip" onclick="quickKeyword('Mỹ Đình')">Sân Mỹ Đình</button>
+            <!-- Loại lịch -->
+            <div class="mb-4">
+                <label class="fw-bold text-dark mb-2">Loại lịch</label>
+                <div class="row g-2">
+                    <div class="col-6 col-md-3"><div class="tab-filter active" onclick="setTab(this)">Sân trống</div></div>
+                </div>
             </div>
-        </div>
 
-        <button class="btn btn-success w-100 py-3 fw-bold fs-5 rounded-pill shadow" id="executeSearch">
-            <i class="bi bi-search me-2"></i>Áp dụng bộ lọc & Tìm sân
-        </button>
-    </div>
-</div>
-
-<!-- Kết quả tìm kiếm -->
-<div class="container mb-5">
-    <h4 class="mb-4 text-secondary fw-bold" id="section-title">📍 Kết quả tìm kiếm</h4>
-    <div class="row" id="stadium-list">
-    </div>
-</div>
-
-<!-- Modal Chi tiết cụm sân -->
-<div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-success text-white">
-                <h5 class="modal-title fw-bold" id="modalStadiumName">Thông tin chi tiết cụm sân</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            <!-- Chọn thời gian -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <label class="fw-bold text-dark mb-2">Chọn ngày</label>
+                    <input type="date" id="searchDate" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label class="fw-bold text-dark mb-2">Từ giờ</label>
+                    <input type="time" id="timeFrom" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label class="fw-bold text-dark mb-2">Đến giờ</label>
+                    <input type="time" id="timeTo" class="form-control">
+                </div>
             </div>
-            <div class="modal-body">
-                <div class="card mb-3 border-success bg-light">
-                    <div class="card-body">
-                        <h6 class="text-success fw-bold mb-2">📌 Địa chỉ & Mô tả:</h6>
-                        <p class="mb-1"><strong>Địa chỉ:</strong> <span id="modalStadiumAddress"></span></p>
-                        <p class="mb-0"><strong>Mô tả:</strong> <span id="modalStadiumDesc" class="text-muted"></span></p>
+
+            <!-- Địa điểm -->
+            <div class="mb-4">
+                <label class="fw-bold text-dark mb-2">Khu vực / Địa điểm</label>
+                <div class="row g-2">
+                    <div class="col-md-6 mb-2 mb-md-0">
+                        <select id="citySelect" class="form-select">
+                            <option value="">Chọn Tỉnh/TP (Tất cả)</option>
+                            <option value="Hà Nội" selected>Hà Nội</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" id="addressKeyword" class="form-control" placeholder="Nhập tên đường, phường/xã, tên sân...">
                     </div>
                 </div>
-                <h6 class="fw-bold mb-3 text-secondary">📋 Bảng danh sách sân con & Đặt lịch:</h6>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover align-middle">
-                        <thead class="table-success text-center">
-                        <tr>
-                            <th>Tên sân con</th>
-                            <th>Loại môn</th>
-                            <th>Giá tiền / Giờ</th>
-                            <th>Thao tác</th>
-                        </tr>
-                        </thead>
-                        <tbody id="field-table-body">
-                        <tr><td colspan="4" class="text-center text-muted">Đang tải...</td></tr>
-                        </tbody>
-                    </table>
+            </div>
+
+            <!-- Từ khóa gợi ý -->
+            <div class="mb-4">
+                <label class="fw-bold text-dark mb-2">Từ khóa phổ biến</label>
+                <div class="d-flex flex-wrap gap-2">
+                    <button class="keyword-chip" onclick="quickKeyword('Pickleball')">Pickleball gần tôi</button>
+                    <button class="keyword-chip" onclick="quickKeyword('Cầu lông')">Cầu lông gần tôi</button>
+                    <button class="keyword-chip" onclick="quickKeyword('Thủy Lợi')">Sân Thủy Lợi</button>
+                    <button class="keyword-chip" onclick="quickKeyword('Mỹ Đình')">Sân Mỹ Đình</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+
+            <button class="btn btn-success w-100 py-3 fw-bold fs-5 rounded-pill shadow" id="executeSearch">
+                <i class="bi bi-search me-2"></i>Áp dụng bộ lọc & Tìm sân
+            </button>
+        </div>
+    </div>
+
+    <!-- Kết quả tìm kiếm -->
+    <div class="container mb-5">
+        <h4 class="mb-4 text-secondary fw-bold" id="section-title">📍 Kết quả tìm kiếm</h4>
+        <div class="row" id="stadium-list">
+        </div>
+    </div>
+
+    <!-- Modal Chi tiết cụm sân -->
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title fw-bold" id="modalStadiumName">Thông tin chi tiết cụm sân</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="card mb-3 border-success bg-light">
+                        <div class="card-body">
+                            <h6 class="text-success fw-bold mb-2">📌 Địa chỉ & Mô tả:</h6>
+                            <p class="mb-1"><strong>Địa chỉ:</strong> <span id="modalStadiumAddress"></span></p>
+                            <p class="mb-0"><strong>Mô tả:</strong> <span id="modalStadiumDesc" class="text-muted"></span></p>
+                        </div>
+                    </div>
+                    <h6 class="fw-bold mb-3 text-secondary">📋 Bảng danh sách sân con & Đặt lịch:</h6>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover align-middle">
+                            <thead class="table-success text-center">
+                            <tr>
+                                <th>Tên sân con</th>
+                                <th>Loại môn</th>
+                                <th>Giá tiền / Giờ</th>
+                                <th>Thao tác</th>
+                            </tr>
+                            </thead>
+                            <tbody id="field-table-body">
+                            <tr><td colspan="4" class="text-center text-muted">Đang tải...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Footer -->
-<footer class="text-white pt-4 pb-3" style="background-color: #059669;">
-    <div class="container text-center small text-white-50">
-        © 2026 Smart Stadium Team. All rights reserved.
-    </div>
-</footer>
+    <!-- Footer -->
+    <footer class="text-white pt-4 pb-3" style="background-color: #059669;">
+        <div class="container text-center small text-white-50">
+            © 2026 Smart Stadium Team. All rights reserved.
+        </div>
+    </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    let allStadiums = [];
-    let selectedSport = 'all';
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let allStadiums = [];
+        let selectedSport = 'all';
 
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('searchDate').valueAsDate = new Date();
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('searchDate').valueAsDate = new Date();
 
-        fetch('/api/stadiums')
-            .then(res => res.json())
-            .then(data => {
-                allStadiums = data || [];
-                filterAndRender();
-            });
-    });
-
-    const sportChips = document.querySelectorAll('.sport-chip');
-    sportChips.forEach(chip => {
-        chip.addEventListener('click', (e) => {
-            sportChips.forEach(c => c.classList.remove('active'));
-            e.target.classList.add('active');
-            selectedSport = e.target.getAttribute('data-sport');
-        });
-    });
-
-    function setTab(element) {
-        document.querySelectorAll('.tab-filter').forEach(t => t.classList.remove('active'));
-        element.classList.add('active');
-    }
-
-    function quickKeyword(keyword) {
-        document.getElementById('addressKeyword').value = keyword;
-    }
-
-    document.getElementById('executeSearch').addEventListener('click', filterAndRender);
-
-    async function filterAndRender() {
-        const searchDate = document.getElementById('searchDate').value; // Định dạng YYYY-MM-DD
-        const timeFromInput = document.getElementById('timeFrom').value; // HH:mm
-        const timeToInput = document.getElementById('timeTo').value;     // HH:mm
-        const addressKey = document.getElementById('addressKeyword').value.toLowerCase().trim();
-
-        // Kiểm tra nếu người dùng đã nhập đủ thông tin thời gian, ta gọi API tìm sân trống theo giờ
-        if (searchDate && timeFromInput && timeToInput) {
-            const startTime = timeFromInput.length === 5 ? timeFromInput + ":00" : timeFromInput;
-            const endTime = timeToInput.length === 5 ? timeToInput + ":00" : timeToInput;
-
-            const url = `/api/stadiums/search-available?date=${searchDate}&startTime=${startTime}&endTime=${endTime}`;
-
-            try {
-                let res = await fetch(url);
-                let availableFields = await res.json();
-
-                // availableFields trả về danh sách các "Field" (sân con) trống.
-                // Ta có thể gom nhóm chúng theo Cụm sân (Stadium) để hiển thị lên giao diện thẻ.
-                let stadiumMap = new Map();
-                availableFields.forEach(field => {
-                    if (field.stadium) {
-                        if (!stadiumMap.has(field.stadium.id)) {
-                            stadiumMap.set(field.stadium.id, field.stadium);
-                        }
-                    }
+            fetch('/api/stadiums')
+                .then(res => res.json())
+                .then(data => {
+                    allStadiums = data || [];
+                    filterAndRender();
                 });
+        });
 
-                let filtered = Array.from(stadiumMap.values());
+        const sportChips = document.querySelectorAll('.sport-chip');
+        sportChips.forEach(chip => {
+            chip.addEventListener('click', (e) => {
+                sportChips.forEach(c => c.classList.remove('active'));
+                e.target.classList.add('active');
+                selectedSport = e.target.getAttribute('data-sport');
+            });
+        });
 
-                // Lọc tiếp theo từ khóa địa điểm nếu có nhập
-                if (addressKey) {
-                    filtered = filtered.filter(stadium =>
-                        stadium.name.toLowerCase().includes(addressKey) ||
-                        (stadium.address && stadium.address.toLowerCase().includes(addressKey))
-                    );
-                }
-
-                document.getElementById('section-title').innerText = `📍 Tìm thấy ${filtered.length} cụm sân có sân trống phù hợp`;
-                renderStadiums(filtered);
-                return;
-            } catch (e) {
-                console.error("Lỗi gọi API tìm sân trống:", e);
-            }
+        function setTab(element) {
+            document.querySelectorAll('.tab-filter').forEach(t => t.classList.remove('active'));
+            element.classList.add('active');
         }
 
-        // Trường hợp chưa chọn đủ giờ thì fallback về lọc thông thường trên allStadiums
-        let filtered = [];
-        for (let stadium of allStadiums) {
-            let matchAddress = !addressKey ||
-                stadium.name.toLowerCase().includes(addressKey) ||
-                (stadium.address && stadium.address.toLowerCase().includes(addressKey));
+        function quickKeyword(keyword) {
+            document.getElementById('addressKeyword').value = keyword;
+        }
 
-            if (!matchAddress) continue;
+        document.getElementById('executeSearch').addEventListener('click', filterAndRender);
 
-            if (selectedSport === 'all') {
-                filtered.push(stadium);
-            } else {
+        async function filterAndRender() {
+            const searchDate = document.getElementById('searchDate').value; // Định dạng YYYY-MM-DD
+            const timeFromInput = document.getElementById('timeFrom').value; // HH:mm
+            const timeToInput = document.getElementById('timeTo').value;     // HH:mm
+            const addressKey = document.getElementById('addressKeyword').value.toLowerCase().trim();
+
+            // Kiểm tra nếu người dùng đã nhập đủ thông tin thời gian, ta gọi API tìm sân trống theo giờ
+            if (searchDate && timeFromInput && timeToInput) {
+                const startTime = timeFromInput.length === 5 ? timeFromInput + ":00" : timeFromInput;
+                const endTime = timeToInput.length === 5 ? timeToInput + ":00" : timeToInput;
+
+                const url = `/api/stadiums/search-available?date=${searchDate}&startTime=${startTime}&endTime=${endTime}`;
+
                 try {
-                    let res = await fetch(`/api/stadiums/${stadium.id}/fields`);
-                    let fields = await res.json();
-                    let matchField = fields.some(f => f.type && f.type.toLowerCase().includes(selectedSport.toLowerCase()));
-                    let matchName = stadium.name.toLowerCase().includes(selectedSport.toLowerCase());
+                    let res = await fetch(url);
+                    let availableFields = await res.json();
 
-                    if (matchField || matchName) {
-                        filtered.push(stadium);
+                    // availableFields trả về danh sách các "Field" (sân con) trống.
+                    // Ta có thể gom nhóm chúng theo Cụm sân (Stadium) để hiển thị lên giao diện thẻ.
+                    let stadiumMap = new Map();
+                    availableFields.forEach(field => {
+                        if (field.stadium) {
+                            if (!stadiumMap.has(field.stadium.id)) {
+                                stadiumMap.set(field.stadium.id, field.stadium);
+                            }
+                        }
+                    });
+
+                    let filtered = Array.from(stadiumMap.values());
+
+                    // Lọc tiếp theo từ khóa địa điểm nếu có nhập
+                    if (addressKey) {
+                        filtered = filtered.filter(stadium =>
+                            stadium.name.toLowerCase().includes(addressKey) ||
+                            (stadium.address && stadium.address.toLowerCase().includes(addressKey))
+                        );
                     }
+
+                    document.getElementById('section-title').innerText = `📍 Tìm thấy ${filtered.length} cụm sân có sân trống phù hợp`;
+                    renderStadiums(filtered);
+                    return;
                 } catch (e) {
-                    console.error(e);
+                    console.error("Lỗi gọi API tìm sân trống:", e);
                 }
             }
-        }
 
-        document.getElementById('section-title').innerText = `📍 Tìm thấy ${filtered.length} cụm sân phù hợp`;
-        renderStadiums(filtered);
-    }
+            // Trường hợp chưa chọn đủ giờ thì fallback về lọc thông thường trên allStadiums
+            let filtered = [];
+            for (let stadium of allStadiums) {
+                let matchAddress = !addressKey ||
+                    stadium.name.toLowerCase().includes(addressKey) ||
+                    (stadium.address && stadium.address.toLowerCase().includes(addressKey));
 
-    function renderStadiums(stadiums) {
-        const container = document.getElementById('stadium-list');
-        container.innerHTML = '';
+                if (!matchAddress) continue;
 
-        if (!stadiums || stadiums.length === 0) {
-            container.innerHTML = `<div class="col-12 text-center text-muted py-5">Không tìm thấy sân phù hợp với các tiêu chí lọc của bạn.</div>`;
-            return;
-        }
+                if (selectedSport === 'all') {
+                    filtered.push(stadium);
+                } else {
+                    try {
+                        let res = await fetch(`/api/stadiums/${stadium.id}/fields`);
+                        let fields = await res.json();
+                        let matchField = fields.some(f => f.type && f.type.toLowerCase().includes(selectedSport.toLowerCase()));
+                        let matchName = stadium.name.toLowerCase().includes(selectedSport.toLowerCase());
 
-        stadiums.forEach(stadium => {
-            let col = document.createElement('div');
-            col.className = "col-md-4 mb-4";
-            col.innerHTML = `
-                <div class="card card-stadium shadow-sm h-100">
-                    <div class="card-body d-flex flex-column">
-                        <h4 class="card-title text-success fw-bold">${stadium.name}</h4>
-                        <p class="card-text text-muted mb-2">📍 ${stadium.address}</p>
-                        <p class="card-text flex-grow-1">${stadium.description ? stadium.description : 'Không có mô tả.'}</p>
-                        <button class="btn btn-outline-success w-100 mt-3 detail-btn">Xem chi tiết & Đặt sân</button>
-                    </div>
-                </div>
-            `;
-
-            col.querySelector('.detail-btn').addEventListener('click', () => {
-                viewStadiumDetail(stadium.id, stadium.name, stadium.address, stadium.description || '');
-            });
-
-            container.appendChild(col);
-        });
-    }
-
-    function viewStadiumDetail(stadiumId, stadiumName, stadiumAddress, stadiumDesc) {
-        document.getElementById('modalStadiumName').innerText = "Cụm sân: " + stadiumName;
-        document.getElementById('modalStadiumAddress').innerText = stadiumAddress;
-        document.getElementById('modalStadiumDesc').innerText = stadiumDesc;
-
-        const tableBody = document.getElementById('field-table-body');
-        tableBody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">Đang tải danh sách sân con...</td></tr>`;
-
-        var myModal = new bootstrap.Modal(document.getElementById('detailModal'));
-        myModal.show();
-
-        fetch(`/api/stadiums/${stadiumId}/fields`)
-            .then(res => res.json())
-            .then(fields => {
-                if (!fields || fields.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="4" class="text-center text-danger">Cụm sân này hiện chưa có sân con nào.</td></tr>`;
-                    return;
+                        if (matchField || matchName) {
+                            filtered.push(stadium);
+                        }
+                    } catch (e) {
+                        console.error(e);
+                    }
                 }
-                let html = '';
-                fields.forEach(field => {
-                    html += `
-                        <tr>
-                            <td class="fw-bold text-dark">${field.name}</td>
-                            <td><span class="badge bg-success">${field.type}</span></td>
-                            <td class="text-danger fw-bold">${field.pricePerHour ? field.pricePerHour.toLocaleString() : 0} đ</td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-success px-3" onclick="alert('Đã chọn đặt lịch: ${field.name}')">Đặt lịch</button>
-                            </td>
-                        </tr>
-                    `;
+            }
+
+            document.getElementById('section-title').innerText = `📍 Tìm thấy ${filtered.length} cụm sân phù hợp`;
+            renderStadiums(filtered);
+        }
+
+        function renderStadiums(stadiums) {
+            const container = document.getElementById('stadium-list');
+            container.innerHTML = '';
+
+            if (!stadiums || stadiums.length === 0) {
+                container.innerHTML = `<div class="col-12 text-center text-muted py-5">Không tìm thấy sân phù hợp với các tiêu chí lọc của bạn.</div>`;
+                return;
+            }
+
+            stadiums.forEach(stadium => {
+                let col = document.createElement('div');
+                col.className = "col-md-4 mb-4";
+                col.innerHTML = `
+                    <div class="card card-stadium shadow-sm h-100">
+                        <div class="card-body d-flex flex-column">
+                            <h4 class="card-title text-success fw-bold">${stadium.name}</h4>
+                            <p class="card-text text-muted mb-2">📍 ${stadium.address}</p>
+                            <p class="card-text flex-grow-1">${stadium.description ? stadium.description : 'Không có mô tả.'}</p>
+                            <button class="btn btn-outline-success w-100 mt-3 detail-btn">Xem chi tiết & Đặt sân</button>
+                        </div>
+                    </div>
+                `;
+
+                col.querySelector('.detail-btn').addEventListener('click', () => {
+                    viewStadiumDetail(stadium.id, stadium.name, stadium.address, stadium.description || '');
                 });
-                tableBody.innerHTML = html;
+
+                container.appendChild(col);
             });
-    }
-</script>
-</body>
-</html>
+        }
+
+        function viewStadiumDetail(stadiumId, stadiumName, stadiumAddress, stadiumDesc) {
+            document.getElementById('modalStadiumName').innerText = "Cụm sân: " + stadiumName;
+            document.getElementById('modalStadiumAddress').innerText = stadiumAddress;
+            document.getElementById('modalStadiumDesc').innerText = stadiumDesc;
+
+            const tableBody = document.getElementById('field-table-body');
+            tableBody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">Đang tải danh sách sân con...</td></tr>`;
+
+            var myModal = new bootstrap.Modal(document.getElementById('detailModal'));
+            myModal.show();
+
+            fetch(`/api/stadiums/${stadiumId}/fields`)
+                .then(res => res.json())
+                .then(fields => {
+                    if (!fields || fields.length === 0) {
+                        tableBody.innerHTML = `<tr><td colspan="4" class="text-center text-danger">Cụm sân này hiện chưa có sân con nào.</td></tr>`;
+                        return;
+                    }
+                    let html = '';
+                    fields.forEach(field => {
+                        html += `
+                            <tr>
+                                <td class="fw-bold text-dark">${field.name}</td>
+                                <td><span class="badge bg-success">${field.type}</span></td>
+                                <td class="text-danger fw-bold">${field.pricePerHour ? field.pricePerHour.toLocaleString() : 0} đ</td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-success px-3" onclick="alert('Đã chọn đặt lịch: ${field.name}')">Đặt lịch</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    tableBody.innerHTML = html;
+                });
+        }
+    </script>
+    </body>
+    </html>
