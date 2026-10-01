@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán Đặt Sân - Smart Stadium</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body { background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .checkout-card { background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 30px; margin-top: 40px; }
+        #qrCodeSection { display: block; transition: all 0.3s ease; }
+    </style>
+</head>
+<body>
+
+<div class="container mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="checkout-card">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="fw-bold text-success mb-0"><i class="bi bi-receipt me-2"></i>Xác Nhận Thanh Toán</h3>
+                    <a href="index.html" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
+                        <i class="bi bi-arrow-left me-1"></i> Quay lại trang chủ
+                    </a>
+                </div>
+
+                <!-- Thông tin chi tiết lịch đặt -->
+                <div class="card border-success bg-light mb-4">
+                    <div class="card-body">
+                        <h5 class="fw-bold text-success mb-3">📌 Chi tiết lịch đặt sân</h5>
+                        <ul class="list-unstyled mb-0 lh-lg">
+                            <li><strong>Cụm sân:</strong> <span id="viewStadiumName">--</span></li>
+                            <li><strong>Sân con:</strong> <span id="viewFieldName">--</span> (<span id="viewFieldType">--</span>)</li>
+                            <li><strong>Địa chỉ:</strong> <span id="viewAddress">--</span></li>
+                            <li><strong>Ngày đặt:</strong> <span id="viewDate" class="text-primary fw-bold">--</span></li>
+                            <li><strong>Khung giờ:</strong> <span id="viewTime" class="text-danger fw-bold">--</span></li>
+                            <li><strong>Tổng tiền tạm tính:</strong> <span id="viewPrice" class="text-danger fw-bold fs-5">--</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Phương thức thanh toán -->
+                <h5 class="fw-bold text-dark mb-3">💳 Chọn phương thức thanh toán</h5>
+                <div class="form-check mb-2 p-3 border rounded bg-white">
+                    <input class="form-check-input" type="radio" name="payMethod" id="qrPay" value="QR" checked onchange="togglePaymentSection()">
+                    <label class="form-check-label fw-bold" for="qrPay">
+                        Chuyển khoản / Quét mã QR (VietQR)
+                    </label>
+                </div>
+
+                <!-- Khu vực hiển thị mã QR khi chọn chuyển khoản -->
+                <div id="qrCodeSection" class="card border-success p-3 bg-white mb-3 text-center shadow-sm">
+                    <h6 class="fw-bold text-success mb-2">Quét mã QR để thanh toán</h6>
+                    <p class="small text-muted mb-2">Sử dụng ứng dụng Ngân hàng hoặc Ví điện tử để quét mã</p>
+                    <!-- Bạn có thể thay link ảnh VietQR của riêng bạn vào đây -->
+                    <img src="https://img.vietqr.io/image/VCB-0123456789-compact2.png?amount=0&addInfo=DAT_SAN_SMART_STADIUM" alt="VietQR" class="img-fluid mx-auto mb-2 rounded" style="max-width: 180px;" id="dynamicQrImg">
+                    <div class="small fw-bold text-danger">Số tiền cần chuyển: <span id="qrAmountText">--</span></div>
+                </div>
+
+                <div class="form-check mb-4 p-3 border rounded bg-white">
+                    <input class="form-check-input" type="radio" name="payMethod" id="cashPay" value="CASH" onchange="togglePaymentSection()">
+                    <label class="form-check-label fw-bold" for="cashPay">
+                        Thanh toán trực tiếp tại sân
+                    </label>
+                </div>
+
+                <button type="button" class="btn btn-success w-100 py-3 fw-bold fs-5 rounded-pill shadow" onclick="confirmCheckout()">
+                    Hoàn Tất Đặt Sân
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let globalBookingData = null;
+    let currentUser = null;
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // 1. Kiểm tra thông tin người dùng đang đăng nhập từ localStorage
+        const userStr = localStorage.getItem('currentUser');
+        if (!userStr) {
+            alert('Bạn cần đăng nhập để thực hiện đặt sân!');
+            window.location.href = 'login.html';
+            return;
+        }
+        currentUser = JSON.parse(userStr);
+
+        // 2. Lấy dữ liệu đặt sân từ trang chủ truyền sang
+        const dataStr = localStorage.getItem('pendingBooking');
+        if (!dataStr) {
+            alert('Không tìm thấy thông tin đặt sân. Vui lòng chọn lại sân!');
+            window.location.href = 'index.html';
+            return;
+        }
+
+        globalBookingData = JSON.parse(dataStr);
+
+        // 3. Hiển thị dữ liệu lên giao diện
+        document.getElementById('viewStadiumName').innerText = globalBookingData.stadiumName || '--';
+        document.getElementById('viewFieldName').innerText = globalBookingData.fieldName || '--';
+        document.getElementById('viewFieldType').innerText = globalBookingData.fieldType || '--';
+        document.getElementById('viewAddress').innerText = globalBookingData.stadiumAddress || '--';
+        document.getElementById('viewDate').innerText = globalBookingData.bookingDate || '--';
+        document.getElementById('viewTime').innerText = `${globalBookingData.startTime} đến ${globalBookingData.endTime}`;
+        document.getElementById('viewPrice').innerText = globalBookingData.totalPriceText || '--';
+        document.getElementById('qrAmountText').innerText = globalBookingData.totalPriceText || '--';
+    });
+
+    // Ẩn hiện phần quét mã QR tùy theo lựa chọn phương thức thanh toán
+    function togglePaymentSection() {
+        const qrPayChecked = document.getElementById('qrPay').checked;
+        const qrSection = document.getElementById('qrCodeSection');
+        if (qrPayChecked) {
+            qrSection.style.display = 'block';
+        } else {
+            qrSection.style.display = 'none';
+        }
+    }
+
+    // 4. Gửi dữ liệu xuống CSDL thông qua API Backend
+    async function confirmCheckout() {
+        const selectedMethod = document.querySelector('input[name="payMethod"]:checked').value;
+
+        // Nếu khách hàng chọn chuyển khoản QR nhưng chưa xác nhận đã chuyển
+        if (selectedMethod === 'QR') {
+            const hasTransferred = confirm("⚠️ Bạn chọn phương thức Chuyển khoản QR.\n\nBạn đã thực hiện quét mã và chuyển khoản thành công chưa?\n\n(Bấm 'OK' nếu đã chuyển xong, bấm 'Cancel' nếu chưa)");
+            if (!hasTransferred) {
+                return;
+            }
+        }
+
+        // Đóng gói tham số khớp với BookingController (@RequestParam)
+        const params = new URLSearchParams();
+        params.append('userId', currentUser.id || currentUser.userId);
+        params.append('fieldId', globalBookingData.fieldId);
+        params.append('date', globalBookingData.bookingDate);           // Định dạng: YYYY-MM-DD
+        params.append('startTime', globalBookingData.startTime);       // Định dạng: HH:mm
+        params.append('endTime', globalBookingData.endTime);           // Định dạng: HH:mm
+
+        try {
+            const response = await fetch('/api/bookings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: params
+            });
+
+            if (response.ok) {
+                alert('🎉 Đặt sân thành công và đã được lưu vào cơ sở dữ liệu!');
+
+                // Xóa dữ liệu tạm sau khi đặt thành công
+                localStorage.removeItem('pendingBooking');
+
+                // Quay về trang chủ
+                window.location.href = 'index.html';
+            } else {
+                const errorMsg = await response.text();
+                alert('Lỗi lưu CSDL: ' + (errorMsg || 'Không thể hoàn tất đặt sân.'));
+            }
+        } catch (error) {
+            console.error('Lỗi kết nối:', error);
+            alert('Không thể kết nối đến máy chủ để lưu lịch đặt sân.');
+        }
+    }
+</script>
+</body>
+</html>
